@@ -2,23 +2,17 @@
   text-align: center;
   
 }
-.messageContainer{
-  display: flex;
-  flex-direction: column;
-}
 
 .green {
   background-color: lightgreen;
   border-radius: 10px;
-  margin: 10px;
-  justify-content: flex-start;
+  margin: 10px auto;
   width: 40%;
 }
 
 .red {
   background-color: lightcoral;
   border-radius: 10px;
-  margin: 10px;
-  justify-content: flex-end;
+  margin: 10px auto;
   width: 40%;
 }

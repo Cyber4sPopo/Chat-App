@@ -21,23 +21,29 @@ function App() {
       }, 200);
   }, []);
 
-  async function addMessage() {
+  const addMessage = async (e) => {
+    e.preventDefault();
+
     await axios.post("/messages",{
       message: messageInput,
       id
-    });  
+    });
+    setMessageInput("");  
   }
 
 
   return (
     <div className="App">
       <div>
-        <input
-          onChange={e => {setMessageInput(e.target.value)}}
-          type="name"
-          placeholder="send a message"
-        ></input>
-        <button onClick={addMessage}>click me</button>
+        <form onSubmit={addMessage}>
+          <input
+            value={messageInput}
+            onChange={e => {setMessageInput(e.target.value)}}
+            type="name"
+            placeholder="send a message"
+          ></input>
+          <button type='submit'>click me</button>
+        </form>
       </div>
       <div className="messageContainer">
         {chat.map((message) => <div className={message.id === id ? 'green' : 'red'}>{message.message}</div>)}
