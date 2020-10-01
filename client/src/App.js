@@ -1,24 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect, useRef}from "react";
+import axios from "axios";
+import "./App.css";
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 
 function App() {
+  const [id, setId] = useState();
+  const [chat, setChat] = useState([]);
+  const [messageInput, setMessageInput] = useState();
+
+
+  useEffect(() => {
+    setId(getRandomInt(2000));
+    setInterval(async () => {
+        const { data } = await axios.get("/messages");
+        console.log(data);
+        setChat(data);
+      }, 200);
+  }, []);
+
+  async function addMessage() {
+    await axios.post("/messages",{
+      message: messageInput,
+      id
+    });  
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <input
+          onChange={e => {setMessageInput(e.target.value)}}
+          type="name"
+          placeholder="send a message"
+        ></input>
+        <button onClick={addMessage}>click me</button>
+      </div>
+      <div className="messageContainer">
+        {chat.map((message) => <div className={message.id === id ? 'green' : 'red'}>{message.message}</div>)}
+      </div>
     </div>
   );
 }

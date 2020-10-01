@@ -11,7 +11,7 @@ app.get('/messages', (req, res) => {
 })
 
 app.post('/messages', (req, res) => {
-    messages.push(req.body.message);
+    messages.push(req.body);
     res.send('sent');
 })
 
