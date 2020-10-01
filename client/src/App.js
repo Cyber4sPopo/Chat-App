@@ -7,13 +7,13 @@ function getRandomInt(max) {
 }
 
 function App() {
-  const [id, setId] = useState();
+  const [user, setUser] = useState();
   const [chat, setChat] = useState([]);
   const [messageInput, setMessageInput] = useState();
 
 
   useEffect(() => {
-    setId(getRandomInt(2000));
+    setUser('Guest#' + getRandomInt(2000));
     setInterval(async () => {
         const { data } = await axios.get("/messages");
         console.log(data);
@@ -23,14 +23,12 @@ function App() {
 
   const addMessage = async (e) => {
     e.preventDefault();
-
     await axios.post("/messages",{
       message: messageInput,
-      id
+      user
     });
     setMessageInput("");  
   }
-
 
   return (
     <div className="App">
@@ -42,11 +40,12 @@ function App() {
             type="name"
             placeholder="send a message"
           ></input>
-          <button type='submit'>click me</button>
+          <button type='submit'>Send</button>
         </form>
       </div>
       <div className="messageContainer">
-        {chat.map((message) => <div className={message.id === id ? 'green' : 'red'}>{message.message}</div>)}
+        Name: {user}
+        {chat.map((message) => <div className={message.user === user ? 'green' : 'red'}>{`${message.user}: \n ${message.message}`}</div>)}
       </div>
     </div>
   );
