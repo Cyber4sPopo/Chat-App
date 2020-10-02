@@ -29,6 +29,7 @@ describe("Tests", () => {
     page1 = await browser.newPage();
     page2 = await browser.newPage();
     useNock(page1, ["http://localhost:3000/"]);
+    useNock(page2, ["http://localhost:3000/"]);
   });
   beforeEach(() => {
     mockMessages = [
@@ -111,44 +112,44 @@ describe("Tests", () => {
     expect(messagesUpdated.length).toBe(4);
   }, 30000);
 
-  //   test("if send button sends post request to server", async () => {
-  //     //page 2
-  //     useNock(page2, ["http://localhost:3000/"]);
-  //     await page2.goto("http://localhost:3000/");
-  //     const getMessages = await nock("http://localhost:3000", {
-  //       allowUnmocked: true,
-  //     })
-  //       .get("/messages")
-  //       .reply(200, mockMessages);
+  test("if send button sends post request to server", async () => {
+    //page 2
 
-  //     await page2.waitForSelector(".msg", { visible: true });
-  //     const messages = await page2.$$(".msg");
-  //     expect(messages.length).toBe(3);
+    await page2.goto("http://localhost:3000/");
+    const getMessages = await nock("http://localhost:3000", {
+      allowUnmocked: true,
+    }).persist()
+      .get("/messages")
+      .reply(200, mockMessages);
 
-  //     //page 1
-  //     useNock(page1, ["http://localhost:3000/"]);
-  //     const sendMessage = await nock("http://localhost:3000", {
-  //       allowUnmocked: true,
-  //     })
-  //       .post("/messages")
-  //       .reply(200);
+    await page2.waitForSelector(".msg", { visible: true });
+    const messages = await page2.$$(".msg");
+    expect(messages.length).toBe(3);
 
-  //     await page1.type("#messageInput", "Test");
-  //     const button = await page1.$("#sendButton");
-  //     mockMessages.push({message: 'Test2', user: 'Tal'})
-  //     button.click();
+    //page 1
+    const sendMessage = await nock("http://localhost:3000", {
+      allowUnmocked: true,
+    }).persist()
+      .post("/messages")
+      .reply(200);
 
-  //     //page 2
-  //     useNock(page2, ["http://localhost:3000/"]);
-  //     const getMessagesUpdate = await nock("http://localhost:3000", {
-  //       allowUnmocked: true,
-  //     })
-  //       .get("/messages")
-  //       .reply(200, mockMessages);
-  //     await timeout(4000);
-  //     const messagesUpdated = await page2.$$(".msg");
-  //     expect(messagesUpdated.length).toBe(4);
-  //   }, 30000);
+    await page1.type("#messageInput", "Test");
+    const button = await page1.$("#sendButton");
+    mockMessages.push({message: 'Test2', user: 'Tal'})
+    button.click();
+
+    //page 2
+    const getMessagesUpdate = await nock("http://localhost:3000", {
+      allowUnmocked: true,
+    }).persist()
+      .get("/messages")
+      .reply(200, mockMessages);
+    await timeout(4000);
+    const messagesUpdated = await page2.$$(".msg");
+
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    expect(messagesUpdated.length).toBe(4);
+  }, 30000);
 
   test("change user name", async () => {
     const getMessages = await nock("http://localhost:3000", {
