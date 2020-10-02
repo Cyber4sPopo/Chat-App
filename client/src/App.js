@@ -18,7 +18,7 @@ function App() {
         const { data } = await axios.get("/messages");
         console.log(data);
         setChat(data);
-      }, 200);
+      }, 1500);
   }, []);
 
   const addMessage = async (e) => {
@@ -35,17 +35,19 @@ function App() {
       <div>
         <form onSubmit={addMessage}>
           <input
+            id='messageInput'
             value={messageInput}
             onChange={e => {setMessageInput(e.target.value)}}
             type="name"
             placeholder="send a message"
           ></input>
-          <button type='submit'>Send</button>
+          <button id='sendButton' type='submit'>Send</button>
         </form>
       </div>
-      <div className="messageContainer">
+      <div className="messagesContainer"> <div className="messageContainer">
         Name: {user}
-        {chat.map((message) => <div className={message.user === user ? 'green' : 'red'}>{`${message.user}: \n ${message.message}`}</div>)}
+        {chat.map((message) => <div className={message.user === user ? 'green msg' : 'red msg'}>{`${message.user}: \n ${message.message}`}</div>)}
+      </div>
       </div>
     </div>
   );
