@@ -29,6 +29,15 @@ function App() {
     });
     setMessageInput("");  
   }
+  
+  // const changeUser = async (e) => {
+  //   e.preventDefault();
+  //   await axios.post("/messages",{
+  //     message: messageInput,
+  //     user
+  //   });
+  //   setMessageInput("");  
+  // }
 
   return (
     <div className="App">
@@ -38,11 +47,17 @@ function App() {
             id='messageInput'
             value={messageInput}
             onChange={e => {setMessageInput(e.target.value)}}
-            type="name"
             placeholder="send a message"
+            required
           ></input>
           <button id='sendButton' type='submit'>Send</button>
         </form>
+          <input
+            id='changeUserInput'
+            value={user}
+            onChange={e => {setUser(e.target.value)}}
+            placeholder="Change User Name"
+          ></input>
       </div>
       <div className="messagesContainer"> <div className="messageContainer">
         Name: {user}
@@ -50,7 +65,7 @@ function App() {
       </div>
       </div>
     </div>
-  );
-}
+    );
+  }
 
 export default App;

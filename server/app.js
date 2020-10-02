@@ -5,6 +5,16 @@ const app = express();
 app.use(express.json());
 
 const messages = [];
+const users= [];
+
+app.post('/user', (req,res)=>{
+    if(users.some(name => name===req.body.name)){
+        return res.send('user name already taken');
+    }else{
+        users.push(req.body.name);
+        return res.send('registered successfully');
+    }
+})
 
 app.get('/messages', (req, res) => {
     res.json(messages);
